@@ -1,7 +1,7 @@
 
 import * as express from 'express';
 import {Application} from "express";
-import {getAllCourses, getCourseById} from "./get-courses.route";
+import {getAllCourses, getAllCourses2, getCourseById} from "./get-courses.route";
 import {searchLessons} from "./search-lessons.route";
 import {saveCourse} from './save-course.route';
 import {loginUser} from './login.route';
@@ -20,6 +20,7 @@ const cors = require('cors');
 app.use(cors({origin: true}));
 
 app.route('/api/courses').get(getAllCourses);
+app.route('/api/courses2').get(getAllCourses2);
 
 app.route('/api/courses').post(createCourse);
 

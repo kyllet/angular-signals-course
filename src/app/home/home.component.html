@@ -1,24 +1,30 @@
 <div class="courses-panel">
-
   <h3>All Courses</h3>
+  <!-- <h3>Simple Counter: {{ counter() }}</h3>
+  <h3>Counter obj: {{ counterObj().value }}</h3>
+  <h3>Value array: {{ valueArr().join(", ") }}</h3>
+  <h3>10 x {{ counter() }} counter computed: {{ tenXcounter() }}</h3>
+  <h3>100 x {{ counter() }} counter computed: {{ hunXcounter() }}</h3> -->
 
-  <button class="btn">
-    Add Course
-  </button>
+  <button class="btn" (click)="onAddCourse()">Add Course</button>
+
+  <!-- <button class="btn" (click)="increment()">Increment</button> -->
 
   <mat-tab-group>
-
     <mat-tab label="Beginners">
-
-
-
+      <courses-card-list
+        [courses]="beginnerCourses()"
+        (courseUpdated)="onCourseUpdate($event)"
+        (courseDeleted)="onCourseDeleted($event)"
+      ></courses-card-list>
     </mat-tab>
 
     <mat-tab label="Advanced">
-
-
+      <courses-card-list
+        [courses]="advancedCourses()"
+        (courseUpdated)="onCourseUpdate($event)"
+        (courseDeleted)="onCourseDeleted($event)"
+      />
     </mat-tab>
-
   </mat-tab-group>
-
 </div>
