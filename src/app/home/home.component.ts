@@ -79,6 +79,9 @@ export class HomeComponent {
       mode: 'create',
       title: 'Create New Course',
     });
+    if (!newCourse) {
+      return;
+    }
 
     const newCourses = [...this.#courses(), newCourse];
 
@@ -86,6 +89,9 @@ export class HomeComponent {
   }
 
   onCourseUpdate(updatedCourse: Course) {
+    // if (!updatedCourse) {
+    //   return;
+    // }
     const courses = this.#courses();
 
     const newCourses = courses.map((course) =>
