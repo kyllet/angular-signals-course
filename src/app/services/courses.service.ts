@@ -46,4 +46,10 @@ export class CoursesService {
     );
     return firstValueFrom(course$);
   }
+
+
+  async getCourseById(courseId: string): Promise<Course> {
+    const course$ = this.http.get<Course>(`${environment.apiRoot}/courses/${courseId}`);
+    return await firstValueFrom(course$);
+  }
 }
