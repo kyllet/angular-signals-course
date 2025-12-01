@@ -12,8 +12,17 @@ import {LessonDetailComponent} from "./lesson-detail/lesson-detail.component";
     styleUrl: './lessons.component.scss'
 })
 export class LessonsComponent {
+    // lesson = signal()
+    mode = signal<'master' | 'detail'>('master');
+    lessons = signal<Lesson[]>([]);
+    selectedLesson = signal<Lesson|null>(null);
+    lessonsService = inject(LessonsService);
 
+    searchInput = viewChild.required<ElementRef>('search');
 
-
+    onSearch() {
+        const query = this.searchInput()?.nativeElement.value;
+        console.log(query);
+    }
 
 }

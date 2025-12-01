@@ -42,6 +42,26 @@ export function getAllCourses2(req: Request, res: Response) {
 
 }
 
+export function getAllCourses3(req: Request, res: Response) {
+
+  /*
+      console.log("ERROR loading courses!");
+      res.status(500).json({message: 'error occurred.'});
+      return;
+  */
+
+
+
+  setTimeout(() => {
+
+    res.status(200).json({courses:Object.values(COURSES)});
+
+  }, 1500);
+
+
+}
+
+
 
 export function getCourseById(req: Request, res: Response) {
 

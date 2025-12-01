@@ -5,7 +5,9 @@ import {
   inject,
   Injector,
   OnInit,
+  ResourceRef,
   signal,
+  viewChild,
 } from '@angular/core';
 import { CoursesService } from '../services/courses.service';
 import { Course, sortCoursesBySeqNo } from '../models/course.model';
@@ -13,7 +15,7 @@ import { MatTab, MatTabGroup } from '@angular/material/tabs';
 import { CoursesCardListComponent } from '../courses-card-list/courses-card-list.component';
 import { MatDialog } from '@angular/material/dialog';
 import { MessagesService } from '../messages/messages.service';
-import { catchError, forkJoin, from, map, throwError } from 'rxjs';
+import { catchError, forkJoin, from, map, of, throwError } from 'rxjs';
 import {
   toObservable,
   toSignal,
@@ -44,6 +46,8 @@ export class HomeComponent {
 
   messagesService = inject(MessagesService);
 
+  beginnersList = viewChild<CoursesCardListComponent>('beginnersList');
+
   beginnerCourses = computed(() => {
     const courses = this.#courses();
     return courses.filter((course) => course.category === 'BEGINNER');
@@ -53,8 +57,14 @@ export class HomeComponent {
     const courses = this.#courses();
     return courses.filter((course) => course.category === 'ADVANCED');
   });
-
+ 
+  courses2 = signal<Course[]>([]);
+  courses3 = signal<Course[]>([]);
   constructor() {
+
+    effect(() => {
+      console.log('beginnersList', this.beginnersList());
+    });
     effect(() => {
       console.log('Beginner courses: ', this.beginnerCourses());
       console.log('Advanced courses: ', this.advancedCourses());
@@ -62,6 +72,8 @@ export class HomeComponent {
     this.loadCourses().then(() =>
       console.log('All courses loaded', this.#courses())
     );
+
+    // console.log(this.loadCourses2an3().value);
   }
 
   async onCourseDeleted(id: string) {
@@ -114,6 +126,24 @@ export class HomeComponent {
     //     this.loadingService.loadingOff();
     // }
   }
+
+  loadCourses2an3(): ResourceRef<any | undefined> {
+    return rxResource({
+      stream: () =>
+        forkJoin({
+          course2: this.coursesService.getAllCourses2(),
+          course3: this.coursesService.getAllCourses3()
+        })
+    });
+  }
+
+  // loadCourses23 = rxResource({
+  //   stream: () =>
+  //     forkJoin({
+  //       course2: this.coursesService.getAllCourses2(),
+  //       course3: this.coursesService.getAllCourses3()
+  //     })
+  // });
 
   /*
     counter = signal(0);

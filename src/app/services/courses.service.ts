@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpContext } from '@angular/common/http';
 import { environment } from '../../environments/environment';
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom, map, Observable } from 'rxjs';
 import { Course } from '../models/course.model';
 import { GetCoursesResponse } from '../models/get-courses.response';
 import { SkipLoading } from '../loading/skip-loading.component';
@@ -51,5 +51,26 @@ export class CoursesService {
   async getCourseById(courseId: string): Promise<Course> {
     const course$ = this.http.get<Course>(`${environment.apiRoot}/courses/${courseId}`);
     return await firstValueFrom(course$);
+  }
+
+
+getAllCourses2(): Observable<Course[]> {
+    // return this.http.get<Course[]>(`${this.env.apiRoot}/courses2`);
+    let req: any; 
+     this.http.get<Course[]>(`${this.env.apiRoot}/courses2`).pipe(
+      map((res: any) => req = res.courses)
+     );
+ 
+     return req;
+  }
+
+  getAllCourses3(): Observable<Course[]> {
+    // return this.http.get<Course[]>(`${this.env.apiRoot}/courses2`);
+    let req: any; 
+     this.http.get<Course[]>(`${this.env.apiRoot}/courses3`).pipe(
+      map((res: any) => req = res.courses)
+     );
+ 
+     return req;
   }
 }

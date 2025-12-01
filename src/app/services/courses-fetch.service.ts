@@ -76,4 +76,14 @@ export class CoursesServiceWithFetch {
      return req;
   }
 
+  getAllCourses3(): Observable<Course[]> {
+    // return this.http.get<Course[]>(`${this.env.apiRoot}/courses2`);
+    let req: any; 
+     this.http.get<Course[]>(`${this.env.apiRoot}/courses3`).pipe(
+      map((res: any) => req = res.courses)
+     );
+ 
+     return req;
+  }
+
 }
