@@ -1,43 +1,49 @@
-import {Component, ElementRef, inject, signal, viewChild} from '@angular/core';
-import {LessonsService} from "../services/lessons.service";
-import {Lesson} from "../models/lesson.model";
-import {LessonDetailComponent} from "./lesson-detail/lesson-detail.component";
-import { CdkObserveContent } from "@angular/cdk/observers";
+import {
+  Component,
+  ElementRef,
+  inject,
+  signal,
+  viewChild,
+} from '@angular/core';
+import { LessonsService } from '../services/lessons.service';
+import { Lesson } from '../models/lesson.model';
+import { LessonDetailComponent } from './lesson-detail/lesson-detail.component';
+import { CdkObserveContent } from '@angular/cdk/observers';
 
 @Component({
-    selector: 'lessons',
-    imports: [
-    LessonDetailComponent,
-    CdkObserveContent
-],
-    templateUrl: './lessons.component.html',
-    styleUrl: './lessons.component.scss'
+  selector: 'lessons',
+  imports: [LessonDetailComponent, CdkObserveContent],
+  templateUrl: './lessons.component.html',
+  styleUrl: './lessons.component.scss',
 })
 export class LessonsComponent {
+  // lesson = signal()
+  mode = signal<'master' | 'detail'>('master');
+  lessons = signal<Lesson[]>([]);
+  selectedLesson = signal<Lesson | null>(null);
+  lessonsService = inject(LessonsService);
 
+  searchInput = viewChild.required<ElementRef>('search');
 
-    // lesson = signal()
-    mode = signal<'master' | 'detail'>('master');
-    lessons = signal<Lesson[]>([]);
-    selectedLesson = signal<Lesson|null>(null);
-    lessonsService = inject(LessonsService);
+  async onSearch() {
+    const query = this.searchInput()?.nativeElement.value;
+    console.log(query);
+    const results = await this.lessonsService.loadLessons({ query });
+    this.lessons.set(results);
+  }
 
-    searchInput = viewChild.required<ElementRef>('search');
+  onLessonSelected(lesson: Lesson) {
+    this.mode.set('detail');
+    this.selectedLesson.set(lesson);
+  }
 
-    async onSearch() {
-        const query = this.searchInput()?.nativeElement.value;
-        console.log(query);
-        const results = await this.lessonsService.loadLessons({query});
-        this.lessons.set(results);
-    }
+  onCancel() {
+    this.mode.set('master');
+  }
 
-    onLessonSelected(lesson: Lesson) {
-        this.mode.set('detail');
-        this.selectedLesson.set(lesson);
-        }
-
-    onCancel() {
-        this.mode.set('master');
-    }
-
+  onLessonUpdated(lesson: Lesson) {
+    this.lessons.update((lessons) =>
+      lessons.map((l) => (l.id === lesson.id ? lesson : l))
+    );
+  }
 }
