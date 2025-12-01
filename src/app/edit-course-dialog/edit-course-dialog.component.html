@@ -25,7 +25,10 @@
       <option value="ADVANCED">Advanced</option>
     </select>
   </div> -->
-  <course-category-combobox label="Course Category" [(value)]="category" />
+  <course-category-combobox label="Course Category" [(value)]="category">
+    <div class="title" #title>Course Category Content</div>
+    <!-- <div class="title" #title>another title</div> -->
+  </course-category-combobox>
 
   <div class="form-control">
     <label>Course image:</label>
